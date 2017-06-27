@@ -2,12 +2,11 @@
 #define DOG_NTT_H
 
 #include <vector>
-#include <bitset>
-using ll = long long;
-using TimeDomain = std::vector<ll>;
-using FreqDomain = std::vector<ll>;
+using ull = unsigned long long;
+using TimeDomain = std::vector<ull>;
+using FreqDomain = std::vector<ull>;
 
-TimeDomain init(const std::vector<bool>& number);
+TimeDomain init(const std::vector<int>& number);
 void regular(TimeDomain& td);
 FreqDomain ftt(const TimeDomain& td);
 TimeDomain rfft(const FreqDomain& fd);

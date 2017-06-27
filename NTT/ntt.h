@@ -6,7 +6,7 @@ using ull = unsigned long long;
 using TimeDomain = std::vector<ull>;
 using FreqDomain = std::vector<ull>;
 
-TimeDomain init(const std::vector<int>& number);
+TimeDomain init(const std::vector<unsigned int>& number);
 void regular(TimeDomain& td);
 FreqDomain fft(const TimeDomain& td);
 TimeDomain rfft(const FreqDomain& fd);

@@ -9,13 +9,14 @@ constexpr ull truck = 1 << truck_sz;
 
 static_assert(n_sz + 2 * truck_sz < 32, "truck limit exceeds");
 
-constexpr ull Prime = 3*N + 1;      // must be a prime
+constexpr ull Prime = 3*(1<<12) + 1;      // must be a prime
 constexpr ull Root = 11;            // must be a primitive root
 constexpr ull RootRev = 5586;       // must set accordingly
-constexpr ull TwoRev  = 6145;       // must set accordingly
+constexpr ull NRev  = 12286;        // must set accordingly
 static_assert(Prime < (1ull << 32), "prime is too large");
+static_assert(Prime % N == 1 , "prime should be the form of k * N + 1");
 static_assert((Root * RootRev) % Prime == 1,  "Root^-1 != RootRev");
-static_assert((2 * TwoRev) % Prime == 1,      "2^-1 != TwoRev");
+static_assert((N * NRev) % Prime == 1, "N^-1 != NRev");
 
 TimeDomain init(const std::vector<int>& number){
   constexpr int input_base_sz = 32;
@@ -33,6 +34,7 @@ TimeDomain init(const std::vector<int>& number){
       shift -= truck_sz;
     }
   }
+  td.resize(N, 0);
   return td;
 }
 
@@ -55,15 +57,6 @@ ull get_root(int size){
   return result;
 }
 
-ull get_sizeRev_table(int size){
-  static std::unordered_map<int, ull> sizeRev_table{{2, TwoRev}};
-  auto & result = sizeRev_table[size];
-  if(result == 0){
-    ull halfRev = sizeRev_table[size];
-    result = halfRev * halfRev % Prime;
-  }
-  return result;
-}
 
 FreqDomain fast_fourier_transform(const TimeDomain& td, int size){
   if(size == 1){
@@ -78,9 +71,34 @@ FreqDomain fast_fourier_transform(const TimeDomain& td, int size){
   FreqDomain even_fd = fast_fourier_transform(tdEven, size/2);
   FreqDomain odd_fd = fast_fourier_transform(tdOdd, size/2);
   FreqDomain result(size);
-  
+  ull current_root = get_root(size);
+  ull shift = 1;
+  for(int i = 0; i < size/2; ++i){
+    result[i] = (even_fd[i] + odd_fd[i] * shift) % Prime;
+    result[i + size/2] = (even_fd[i] + odd_fd[i] * (Prime-shift)) % Prime;
+    shift = shift * current_root % Prime;
+  }
+  return std::move(result);
 }
 
-FreqDomain ftt(const TimeDomain& td);
-TimeDomain rfft(const FreqDomain& fd);
-FreqDomain multiply(const FreqDomain &fd1, const FreqDomain &fd2);
+FreqDomain fft(const TimeDomain& td){
+  root_table.clear();
+  root_table[1] = Root;
+  return fast_fourier_transform(td, N);
+}
+TimeDomain rfft(const FreqDomain& fd){
+  root_table.clear();
+  root_table[1] = RootRev;
+  auto td = fast_fourier_transform(fd, N);
+  for(auto &digit:td){
+    digit = digit * NRev % Prime;
+  }
+  return td;
+}
+FreqDomain multiply(const FreqDomain &fd1, const FreqDomain &fd2){
+  FreqDomain fd0(fd1.size());
+  for(int i = 0; i < fd0.size(); ++i){
+    fd0[i] = fd1[i] * fd2[i] % Prime;
+  }
+  return fd0;
+}

@@ -8,7 +8,7 @@ using FreqDomain = std::vector<ull>;
 
 TimeDomain init(const std::vector<int>& number);
 void regular(TimeDomain& td);
-FreqDomain ftt(const TimeDomain& td);
+FreqDomain fft(const TimeDomain& td);
 TimeDomain rfft(const FreqDomain& fd);
 FreqDomain multiply(const FreqDomain &fd1, const FreqDomain &fd2);
 #endif // DOG_NTT_H 

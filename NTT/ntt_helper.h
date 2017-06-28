@@ -16,19 +16,19 @@ constexpr bool is_prime(const ull x){
   return x > 1;
 }
 
-constexpr int prime_gen(const ull n, const ull scalar) {
-  for(ull k = scalar; k < scalar + 20; ++k){
+constexpr ull prime_gen(const ull n, const ull scalar) {
+  for(ull k = scalar; k < scalar + 30; ++k){
+    // probability 0.2 for each trial
     ull prime = k * n + 1;
     if(is_prime(prime)) return prime;
   }
-  return 1;
+  return 3;
 }
+
 
 // 
 constexpr ull Prime = prime_gen(N, truck*truck);
 // constexpr ull Prime2 = 1073153;      // must be a prime
-// constexpr ull Root = Helper<Kappa>::pow(PrimitiveRoot);                
-constexpr ull Root = 222967747;         // must set accordingly
 
 static_assert(N*truck*truck < Prime, "truck limit exceeds");
 static_assert(Prime < (1ull << 32),  "prime is too large");
@@ -57,8 +57,23 @@ struct Helper<0>{
   static constexpr ull pow(const ull){return 1;}
 };
 
-
 constexpr ull Kappa = (Prime - 1) / N;
+constexpr bool is_nth_root(const ull root){
+  return Prime-1 == Helper<N/2>::pow(root);
+}
+
+constexpr ull nth_root_gen(){
+  for(ull proot = 2; proot < Prime-2; ++proot){
+    ull root = Helper<Kappa>::pow(proot);
+    if(is_nth_root(root)) return root;
+  }
+  return 0;
+}
+
+// constexpr ull Root = Helper<Kappa>::pow(PrimitiveRoot); 
+// constexpr ull Root2 = 222967747;         // must set accordingly
+constexpr ull Root = nth_root_gen();
+// static_assert(Root == Root2, "hahaha");
 constexpr ull RootRev = Helper<Prime-2>::pow(Root); 
 constexpr ull NRev  = Helper<Prime-2>::pow(N);                     
 static_assert((N * NRev) % Prime == 1,            "N^-1 != NRev");

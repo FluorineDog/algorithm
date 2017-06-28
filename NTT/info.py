@@ -12,9 +12,10 @@ def powp(n, exp, p):
 
 def main():
   n = 2**20
-  mk = 2**8
-  prime_arr = [ (i,p) for (i, p) in [(i, i*n+1) for i in range(mk+0,mk+20)] if is_prime(p) ]
-  k, p = prime_arr[0]
+  mk = 2**11
+  prime_arr = [ (i,p) for (i, p) in [(i-mk, i*n+1) for i in range(mk+0,mk+100)] if is_prime(p) ]
+  k, p = prime_arr[0] 
+  k += mk
   print(prime_arr)
   root_arr = [root for root in [i**k % p for i in range(2,22)] if powp(root,n//2,p) == p-1]
   root = root_arr[0]

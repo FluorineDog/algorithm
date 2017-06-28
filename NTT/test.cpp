@@ -6,7 +6,7 @@ int main(){
   auto fa = fft(a);
   auto fb = fft(b);
   auto fc = multiply(fa, fb);
-  auto c = rfft(fc);
+  auto c = rfft(fa);
   for(int i = 0; i < 16; ++i){
     std::cout << c[i] << "\t";
   }

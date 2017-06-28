@@ -30,6 +30,10 @@ struct Helper<1>{
   static constexpr ull pow(const ull base){return base;}
 };
 
+template <>
+struct Helper<0>{
+  static constexpr ull pow(const ull){return 1;}
+};
 
 constexpr ull Kappa = (Prime - 1) / N;
 constexpr ull Root = Helper<Kappa>::pow(PrimitiveRoot);                

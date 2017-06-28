@@ -2,16 +2,19 @@
 #define DOG_NTT_HELPER_H_
 #include "ntt.h"
 constexpr int truck_sz = 4;  // vary with N
-constexpr int n_sz = 4;     // maximum 20 with truck_sz = 6
+constexpr int n_sz = 12;     // maximum 20 with truck_sz = 6
 
 constexpr ull N = 1 << n_sz;        
 constexpr ull truck = 1 << truck_sz; 
 
 static_assert(n_sz + 2 * truck_sz < 32, "truck limit exceeds");
+
 constexpr ull Prime = 3*(1<<12) + 1;      // must be a prime
 constexpr ull PrimitiveRoot = 11;         // must set accordingly
+
 static_assert(Prime < (1ull << 32), "prime is too large");
-static_assert(Prime % N == 1 ,  "prime should be the form of k * N + 1");
+static_assert(Prime % N == 1 ,      "prime should be the form of k * N + 1");
+
 
 template <int exp>
 struct Helper{
@@ -35,11 +38,15 @@ struct Helper<0>{
   static constexpr ull pow(const ull){return 1;}
 };
 
+
+
 constexpr ull Kappa = (Prime - 1) / N;
 constexpr ull Root = Helper<Kappa>::pow(PrimitiveRoot);                
 constexpr ull RootRev = Helper<Prime-2>::pow(Root);                 
 constexpr ull NRev  = Helper<Prime-2>::pow(N);                      
-static_assert((N * NRev) % Prime == 1, "N^-1 != NRev");
-static_assert((Root * RootRev) % Prime == 1,  "Root^-1 != RootRev");
+static_assert(Helper<N>::pow(Root) == 1,          "may not be a prime");
+static_assert(Helper<N/2>::pow(Root) == Prime-1,  "may not be a primitive root");
+static_assert((N * NRev) % Prime == 1,            "N^-1 != NRev");
+static_assert((Root * RootRev) % Prime == 1,      "Root^-1 != RootRev");
 
 #endif

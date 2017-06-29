@@ -9,7 +9,7 @@ TimeDomain init(const std::vector<unsigned int>& number){
   td.reserve(N);
   ull tmp = 0;
   int shift = 0;
-  for(auto digit:number) {
+  for(ull digit:number) {
     tmp += digit << shift;
     shift += 32;
     while(shift >= truck_sz){
@@ -18,6 +18,7 @@ TimeDomain init(const std::vector<unsigned int>& number){
       shift -= truck_sz;
     }
   }
+  td.push_back(tmp);
   td.resize(N, 0);
   return td;
 }

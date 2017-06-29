@@ -2,8 +2,8 @@
 #define DOG_NTT_HELPER_H_
 // 
 #include "ntt.h"
-constexpr int truck_sz = 4;  // vary with N
-constexpr int n_sz = 20;     // maximum 20 with truck_sz = 6
+constexpr int truck_sz = 6;   // vary with N
+constexpr int n_sz = 19;      // maximum 20 with truck_sz = 6
 
 constexpr ull N = 1ull << n_sz;        
 constexpr ull truck = 1ull << truck_sz; 

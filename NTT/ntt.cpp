@@ -1,8 +1,7 @@
 #include "ntt.h"
 #include "ntt_helper.h"
-#include <cmath>
 using std::vector;
-#include <unordered_map>
+
 TimeDomain init(const std::vector<unsigned int>& number){
   constexpr int input_base_sz = 32;
   // assume base = 1 << 32
@@ -32,17 +31,6 @@ void regular(TimeDomain& td){
   }
 }
 
-//static std::unordered_map<int, ull> root_table;
-//ull get_root(int size){
-//  auto & result = root_table[size];
-//  if(result == 0){
-//    ull subroot = root_table[size/2];
-//    result = subroot * subroot % Prime;
-//  }
-//  return result;
-//}
-
-
 FreqDomain fast_fourier_transform(const TimeDomain& td, int size, ull root){
   if(size == 1){
     return FreqDomain {td[0]};
@@ -69,6 +57,7 @@ FreqDomain fast_fourier_transform(const TimeDomain& td, int size, ull root){
 FreqDomain fft(const TimeDomain& td){
   return fast_fourier_transform(td, N, Root);
 }
+
 TimeDomain rfft(const FreqDomain& fd){
   auto td = fast_fourier_transform(fd, N, RootRev);
   for(auto &digit:td){
@@ -76,6 +65,7 @@ TimeDomain rfft(const FreqDomain& fd){
   }
   return td;
 }
+
 FreqDomain multiply(const FreqDomain &fd1, const FreqDomain &fd2){
   FreqDomain fd0(fd1.size());
   for(int i = 0; i < fd0.size(); ++i){

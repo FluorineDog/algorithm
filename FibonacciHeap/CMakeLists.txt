@@ -1,0 +1,7 @@
+cmake_minimum_required (VERSION 2.6)
+project (tt)
+add_library(fibo fiboheap.cpp)
+add_executable(tt test.cpp)
+add_executable(tt_bin test_bin.cpp)
+target_link_libraries(tt fibo)
+target_compile_features(tt PRIVATE cxx_range_for)

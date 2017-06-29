@@ -1,5 +1,6 @@
 #ifndef DOG_NTT_HELPER_H_
 #define DOG_NTT_HELPER_H_
+// 
 #include "ntt.h"
 constexpr int truck_sz = 4;  // vary with N
 constexpr int n_sz = 20;     // maximum 20 with truck_sz = 6
@@ -26,10 +27,7 @@ constexpr ull prime_gen(const ull n, const ull scalar) {
 }
 
 
-// 
 constexpr ull Prime = prime_gen(N, truck*truck);
-// constexpr ull Prime2 = 1073153;      // must be a prime
-
 static_assert(N*truck*truck < Prime, "truck limit exceeds");
 static_assert(Prime < (1ull << 32),  "prime is too large");
 static_assert(Prime % N == 1 ,       "prime should be the form of k * N + 1");
@@ -63,7 +61,7 @@ constexpr bool is_nth_root(const ull root){
 }
 
 constexpr ull nth_root_gen(){
-  for(ull proot = 2; proot < Prime-2; ++proot){
+  for(ull proot = 2; proot < 32; ++proot){
     ull root = Helper<Kappa>::pow(proot);
     if(is_nth_root(root)) return root;
   }
@@ -76,11 +74,10 @@ constexpr ull Root = nth_root_gen();
 // static_assert(Root == Root2, "hahaha");
 constexpr ull RootRev = Helper<Prime-2>::pow(Root); 
 constexpr ull NRev  = Helper<Prime-2>::pow(N);                     
-static_assert((N * NRev) % Prime == 1,            "N^-1 != NRev");
 static_assert(Helper<Prime-1>::pow(N) == 1,       "not a prime");
 static_assert(Helper<N>::pow(Root) == 1,          "may not be a prime");
 static_assert(Helper<N/2>::pow(Root) == Prime-1,  "may not be a primitive root");
-// static_assert((Root * RootRev) % Prime == 1,      "Root^-1 != RootRev");
-// static_assert(is_prime(3128309273u), "");
+static_assert((N * NRev) % Prime == 1,            "N^-1 != NRev");
+static_assert((Root * RootRev) % Prime == 1,      "Root^-1 != RootRev");
 
 #endif

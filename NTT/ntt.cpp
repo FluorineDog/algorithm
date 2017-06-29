@@ -27,7 +27,7 @@ void regular(TimeDomain& td){
   ull carry = 0;
   for(auto &digit : td){
     carry += digit;
-    digit = carry & (truck - 1);
+    digit = carry & (truck - 1ull);
     carry >>= truck_sz;
   }
 }
@@ -43,7 +43,7 @@ void regular(TimeDomain& td){
 //}
 
 
-FreqDomain fast_fourier_transform(const TimeDomain& td, int size, int root){
+FreqDomain fast_fourier_transform(const TimeDomain& td, int size, ull root){
   if(size == 1){
     return FreqDomain {td[0]};
   }

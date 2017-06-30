@@ -1,37 +1,39 @@
 #include <iostream>
 #include "ntt.h"
+#include "ntt_helper.h"
 #include <random>
 #include <cassert>
 using std::cout;
+using std::vector;
 using std::cin;
 int main(){
   std::default_random_engine e(123);
-  constexpr unsigned NUM = (3 << 19) / 32;
+  unsigned NUM = (3 << n_sz) / 32;
+
   std::vector<unsigned int> va(NUM, 0xFFFFFFFF), vb(NUM, 0xFFFFFFFF);
-  /*
-  for(auto &x: va){
-    x = e();
-  }
-  for(auto &x: vb){
-    x = e();
-  }
-  */
-  const auto a = init(va);
-  const auto b = init(vb);
-  const auto fa = fft(a);
-  const auto fb = fft(b);
-  const auto fc = multiply(fa, fb);
-  const auto tfa = rfft(fa);
+  // for(auto &x: va){
+  //   x = e();
+  // }
+  // for(auto &x: vb){
+  //   x = e();
+  // }
+  auto a = init(va);
+  vector<unsigned>().swap(va);
+  auto b = init(vb);
+  vector<unsigned>().swap(vb);
+  auto fa = fft(a);
+  vector<ull>().swap(a);
+  auto fb = fft(b);
+  vector<ull>().swap(b);
+  auto fc = multiply(fa, fb);
+  vector<ull>().swap(fa);
+  vector<ull>().swap(fa);
   auto c = rfft(fc);
+  vector<ull>().swap(fc);
   regular(c);
 
-  for(int i = 0; i < 6; ++i){
-    std::cout << va[i] << "\t";
-  }
-  std::cout << std::endl;
-  std::cout << std::endl;
   assert(c[0] == 1);
-  int count = (1<<19) / 2;
+  int count = (1<<n_sz) / 2;
   for(int i = 1; i < count; ++i){
     assert(c[i] == 0);
   }

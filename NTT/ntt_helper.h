@@ -1,9 +1,9 @@
 #ifndef DOG_NTT_HELPER_H_
 #define DOG_NTT_HELPER_H_
-// 
+
 #include "ntt.h"
-constexpr int truck_sz = 6;   // vary with N
-constexpr int n_sz = 19;      // maximum 20 with truck_sz = 6
+constexpr int truck_sz = 3;   // vary with N
+constexpr int n_sz = 25;      // maximum 20 with truck_sz = 6
 
 constexpr ull N = 1ull << n_sz;        
 constexpr ull truck = 1ull << truck_sz; 
@@ -31,8 +31,6 @@ constexpr ull Prime = prime_gen(N, truck*truck);
 static_assert(N*truck*truck < Prime, "truck limit exceeds");
 static_assert(Prime < (1ull << 32),  "prime is too large");
 static_assert(Prime % N == 1 ,       "prime should be the form of k * N + 1");
-
-
 
 template <ull exp>
 struct Helper{
@@ -68,10 +66,7 @@ constexpr ull nth_root_gen(){
   return 0;
 }
 
-// constexpr ull Root = Helper<Kappa>::pow(PrimitiveRoot); 
-// constexpr ull Root2 = 222967747;         // must set accordingly
 constexpr ull Root = nth_root_gen();
-// static_assert(Root == Root2, "hahaha");
 constexpr ull RootRev = Helper<Prime-2>::pow(Root); 
 constexpr ull NRev  = Helper<Prime-2>::pow(N);                     
 static_assert(Helper<Prime-1>::pow(N) == 1,       "not a prime");

@@ -48,8 +48,9 @@ FreqDomain fast_fourier_transform(const TimeDomain& td, int size, ull root){
   FreqDomain result(size);
   ull shift = 1;
   for(int i = 0; i < size/2; ++i){
-    result[i] = (even_fd[i] + odd_fd[i] * shift) % Prime;
-    result[i + size/2] = (even_fd[i] + odd_fd[i] * (Prime-shift)) % Prime;
+    ull tmp = odd_fd[i] * shift;
+    result[i] = (even_fd[i] + tmp) % Prime;
+    result[i + size/2] = (even_fd[i] + Prime * Prime - tmp) % Prime;
     shift = shift * root % Prime;
   }
   return std::move(result);

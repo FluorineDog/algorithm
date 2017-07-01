@@ -1,3 +1,4 @@
 project(ntt)
 add_library(ntt ntt.cpp)
-add_executable(tt test.cpp ntt)
+add_library(fntt fntt.cpp)
+add_executable(tt test.cpp ntt fntt)

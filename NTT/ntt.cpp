@@ -1,5 +1,5 @@
 #include "ntt.h"
-#include "ntt_helper.h"
+#include "ntt_c11_helper.h"
 using std::vector;
 
 TimeDomain init(const std::vector<unsigned int>& number){

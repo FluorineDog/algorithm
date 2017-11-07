@@ -1,5 +1,5 @@
 #include "ntt.h"
-#include "ntt_helper.h"
+#include "ntt_c11_helper.h"
 #include <random>
 #include <cassert>
 #include <gtest/gtest.h>
@@ -8,7 +8,7 @@ using std::vector;
 
 TEST(Dog, case1){
   unsigned NUM = (truck_sz << n_sz) / 32 / 2;
-
+  std::vector<unsigned int> va(NUM, 0xFFFFFFFF), vb(NUM, 0xFFFFFFFF);
   auto a = init(va);
   vector<unsigned>().swap(va);
   auto b = init(vb);

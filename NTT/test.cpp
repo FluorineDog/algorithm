@@ -1,6 +1,6 @@
 #include <iostream>
 #include "ntt.h"
-#include "ntt_helper.h"
+#include "ntt_c11_helper.h"
 #include <random>
 #include <cassert>
 using std::cout;
@@ -18,6 +18,7 @@ int main(){
   // for(auto &x: vb){
   //   x = e();
   // }
+  
   auto a = init(va);
   vector<unsigned>().swap(va);
   auto b = init(vb);

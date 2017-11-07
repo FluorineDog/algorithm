@@ -1,10 +1,10 @@
 #include "ntt.h"
-#include "ntt_helper.h"
+#include "ntt_c11_helper.h"
 #include <iostream>
 
 using std::vector;
 class Mapper {
-private:
+public:
   Mapper(){
     data.resize(N);
     data[0] = 0;
@@ -21,12 +21,11 @@ private:
 private:
   vector<int> data;
 public:
-  static int get(int n){
-    static Mapper mapper;
-    return mapper.data[n];
+  int get(int n){
+    return data[n];
   }
 };
-
+static Mapper mapper;
 
 static FreqDomain faster_fourier_transform(TimeDomain&& td, int root_base){
   vector<ull> roots(n_sz);
@@ -34,9 +33,11 @@ static FreqDomain faster_fourier_transform(TimeDomain&& td, int root_base){
     r = root_base;
     root_base = root_base * root_base % Prime;
   }
-  for(int step = 0; step < n_sz; ++step){
+  int endpt = n_sz - 1;
+  for(int step = 0; step < endpt; ++step){
     int offset = 1 << step;
-    for(int beg = 0; beg != N; beg += 2*offset){
+#pragma omp parallel for
+    for(int beg = 0; beg < N; beg += 2*offset){
       ull root = roots[n_sz - 1 - step];
       ull shift = 1;
       for(int i = beg; i < beg + offset; ++i){
@@ -51,13 +52,34 @@ static FreqDomain faster_fourier_transform(TimeDomain&& td, int root_base){
       }
     }
   }
+
+  for(int step = endpt; step < n_sz; ++step){
+    int offset = 1 << step;
+    for(int beg = 0; beg < N; beg += 2*offset){
+      ull root = roots[n_sz - 1 - step];
+      ull shift = 1;
+#pragma omp parallel for
+      for(int i = beg; i < beg + offset; ++i){
+        ull even = td[i];
+        ull odd  = td[i+offset]*shift;
+        ull left = (even + odd) % Prime;
+        ull right = (even + Prime*Prime - odd)%Prime;
+        td[i] = left;
+        td[i + offset] = right;
+        shift = root * shift % Prime;
+        int pause = 1+1;
+      }
+    }
+  }
+
   return std::move(td);
 }
 
 FreqDomain fntt(const TimeDomain& td){
   TimeDomain td_reorder(td.size());
+#pragma omp parallel for
   for(int i = 0; i < td.size(); ++i){
-    td_reorder[i] = td[Mapper::get(i)];
+    td_reorder[i] = td[mapper.get(i)];
     // std::cerr << Mapper::get(i) << "\t";
   }
   // std::cerr << std::endl;
@@ -66,8 +88,9 @@ FreqDomain fntt(const TimeDomain& td){
 
 TimeDomain rfntt(const FreqDomain& fd){
   TimeDomain fd_reorder(fd.size());
+#pragma omp parallel for
   for(int i = 0; i < fd.size(); ++i){
-    fd_reorder[i] = fd[Mapper::get(i)];
+    fd_reorder[i] = fd[mapper.get(i)];
   }
   auto td = faster_fourier_transform(std::move(fd_reorder), RootRev);
   for(auto &digit:td){

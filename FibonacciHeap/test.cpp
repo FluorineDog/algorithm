@@ -31,7 +31,7 @@ int main(){
 		//biheap.decrease_key(index, key);
 		if(i%size == 0){			
 			T dtest = heap.minimum();
-			cout << dtest << ' '<< endl;
+			//cout << dtest << ' '<< endl;
 			//cerr << "extract "<< dtest<<endl;
 			heap.extract_min();
 			//biheap.extract_min();

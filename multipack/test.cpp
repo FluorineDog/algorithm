@@ -22,3 +22,13 @@ TEST(trash, case1){
 	EXPECT_EQ(18 + 15 + 12 + 6, multipack(data, 11)); 
 	EXPECT_EQ(18 + 15 + 12 + 9, multipack(data, 12)); 
 }
+
+TEST(trash, case2){
+	vector<tuple<size_t, double, size_t>> data {
+		{3, 3, 56}, 
+		{3, 4., 64}, 
+		{5, 8., 174}, 
+	};
+	EXPECT_EQ(72, multipack(data, 45)); 
+}
+

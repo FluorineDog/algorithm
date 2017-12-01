@@ -2,14 +2,15 @@
 #include <limits>
 #include <iostream>
 
-constexpr int inf = std::numeric_limits<int>::max() / 2;
+constexpr int inf = std::numeric_limits<int>::max() / 4;
 enum class color_t{black, white};
 struct Edge{
-	Edge(int to = -1, Edge* next = nullptr)
-		:to(to), next(next) {}
+	Edge(int to = -1, Edge* next = nullptr, int flow_capacity = 0)
+		:to(to), next(next), flow_capacity(flow_capacity) {}
 	int to;
 	Edge* next;
 	// any attached data to edges
+	int flow_capacity;
 };
 
 struct Vertex{
@@ -21,8 +22,8 @@ struct Vertex{
 	int discover_time;
 	int parent;
 	int finish_time;
+	int flowing;
 	//int scc_index;
-	int low;
 };
 
 struct Graph 
@@ -51,8 +52,8 @@ struct Graph
 	void showGraph();
 };
 
-inline void add_edge(Graph& graph, int from, int to){
-	graph[from].edges = new Edge(to, graph[from].edges);  
+inline void add_edge(Graph& graph, int from, int to, int flow_capacity = 0){
+	graph[from].edges = new Edge(to, graph[from].edges, flow_capacity);  
 }
 
 #define FOR_EDGE(edge, vertex) \

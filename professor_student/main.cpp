@@ -87,8 +87,8 @@ int breath_first_search(Graph &graph, int source) {
 int main() {
   // entry, stu, pro, time
   int P, student_count, professor_count, time_count;
-  freopen("data.in", "r", stdin);
-  cin >> P >> student_count >> professor_count >> time_count;
+  while(cin >> P){
+  cin >> student_count >> professor_count >> time_count;
   vector<tuple<int, int, int>> data_sheet;
   map<int, int> stu_time_set;
   map<int, int> prof_time_set;
@@ -130,7 +130,6 @@ int main() {
   }
 
   for (auto[stu, prof, time] : data_sheet) {
-    cerr << stu_time_id(stu, time)<< "=>" << prof_time_id(prof, time) << "***";
     add_edge(graph, stu_time_id(stu, time), prof_time_id(prof, time), 1);
     add_edge(graph, prof_time_id(prof, time), stu_time_id(stu, time), 0);
   }
@@ -144,4 +143,5 @@ int main() {
     max_flow += flow;
   }
   cout << max_flow << endl;
+  }
 }

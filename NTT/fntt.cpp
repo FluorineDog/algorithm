@@ -1,5 +1,5 @@
 #include "ntt.h"
-#include "ntt_c11_helper.h"
+#include "ntt_helper.h"
 #include <iostream>
 
 using std::vector;

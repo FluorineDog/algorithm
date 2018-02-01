@@ -1,3 +1,4 @@
+cmake_minimum_required(VERSION 3.5)
 project(ntt)
 #pragma omp parral for
 find_package(OpenMP)

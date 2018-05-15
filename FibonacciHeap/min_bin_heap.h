@@ -5,8 +5,8 @@
 #include <iostream>
 using std::vector;
 using T = long long;
-using std::pair;
 using std::make_pair;
+using std::pair;
 using pti = pair<T, int>;
 
 class BinaryHeap {
